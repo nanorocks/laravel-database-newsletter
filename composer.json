@@ -12,7 +12,8 @@
     "authors": [
         {
             "name": "Nanorocks",
-            "email": "andrejnankov@gmail.com"
+            "email": "andrejnankov@gmail.com",
+            "homepage": "https://nankov.mk"
         }
     ],
     "require": {
@@ -40,7 +41,7 @@
         "test": "phpunit"
     },
     "minimum-stability": "stable",
-    "prefer-stable": true
+    "prefer-stable": true,
     "require-dev": {
         "orchestra/testbench": "^10.6"
     }
