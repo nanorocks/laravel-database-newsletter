@@ -1,7 +1,7 @@
 # Laravel Database Newsletter
 
 ![Laravel](https://img.shields.io/badge/Laravel-^10.x%20-red?style=flat-square)
-![PHP](https://img.shields.io/badge/PHP-^8.1-blue?style=flat-square)
+![PHP](https://img.shields.io/badge/PHP-^8.3-blue?style=flat-square)
 ![License](https://img.shields.io/badge/license-MIT-green?style=flat-square)
 [![Latest Stable Version](https://poser.pugx.org/nanorocks/laravel-database-newsletter/v/stable)](https://packagist.org/packages/nanorocks/laravel-database-newsletter)
 
@@ -86,7 +86,7 @@ Route::get('/test-newsletter', function () {
 ```
 ## 🛠 Supported Versions
 
-- PHP: ^8.1
+- PHP: ^8.3
 
 - Laravel: 10.x, 11.x, 12.x
 
