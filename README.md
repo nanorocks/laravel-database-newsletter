@@ -45,25 +45,43 @@ The configuration file config/newsletter.php can be customized to your needs.
 
 ## 📚 Usage
 
-Subscribe a user:
-```php
-Newsletter::subscribe('john@example.com', ['name' => 'John']);
-```
-
-Check if a user is subscribed:
-```php
-Newsletter::isSubscribed('john@example.com'); // true/false
-```
-
-Unsubscribe a user:
-```php
-Newsletter::unsubscribe('john@example.com');
-```
-
-Retrieve subscriber details:
+Use the `Newsletter` Facade to manage subscribers:
 
 ```php
-$member = Newsletter::getMember('john@example.com');
+use Nanorocks\DatabaseNewsletter\Facades\Newsletter;
+
+Route::get('/test-newsletter', function () {
+    $email = 'john@example.com';
+
+    // Subscribe a user
+    Newsletter::subscribe($email, ['name' => 'John']);
+
+    // Update a subscriber (alias of subscribe)
+    Newsletter::subscribeOrUpdate($email, ['name' => 'John Doe']);
+
+    // Check if a user is subscribed
+    $isSubscribed = Newsletter::isSubscribed($email);
+
+    // Get subscriber details
+    $member = Newsletter::getMember($email);
+
+    // Get all members
+    $allMembers = Newsletter::getAllMembers();
+
+    // Unsubscribe a user
+    Newsletter::unsubscribe($email);
+
+    // Delete a subscriber
+    Newsletter::delete($email);
+
+    return [
+        'is_subscribed' => $isSubscribed,
+        'member' => $member,
+        'all_members' => $allMembers,
+        'is_subscribed_after_unsubscribe' => Newsletter::isSubscribed($email),
+    ];
+});
+
 ```
 ## 🛠 Supported Versions
 
