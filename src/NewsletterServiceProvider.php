@@ -22,7 +22,8 @@ class NewsletterServiceProvider extends ServiceProvider
 
     public function register(): void
     {
-        $this->app->bind('newsletter.database', function () {
+        // Bind the Newsletter Facade
+        $this->app->singleton('newsletter', function () {
             return new DatabaseDriver();
         });
     }
