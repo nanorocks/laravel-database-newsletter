@@ -12,8 +12,7 @@
     "authors": [
         {
             "name": "Nanorocks",
-            "email": "andrejnankov@gmail.com",
-            "website": "https://nankov.mk"
+            "email": "andrejnankov@gmail.com"
         }
     ],
     "require": {
