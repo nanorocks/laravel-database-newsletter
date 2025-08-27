@@ -2,6 +2,7 @@
 
 namespace Nanorocks\DatabaseNewsletter\Facades;
 
+use Nanorocks\DatabaseNewsletter\Drivers\DatabaseDriver;
 use Illuminate\Support\Facades\Facade;
 
 /**
