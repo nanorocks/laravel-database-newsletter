@@ -2,11 +2,13 @@
 
 namespace Nanorocks\DatabaseNewsletter\Drivers;
 
-use Nanorocks\Newsletter\Drivers\Driver;
 use Illuminate\Support\Facades\DB;
 
 class DatabaseDriver implements Driver
 {
+    /**
+     * Subscribe a user or update existing attributes.
+     */
     public function subscribe(string $email, array $attributes = []): bool
     {
         return DB::table('newsletter_subscribers')->updateOrInsert(
@@ -15,17 +17,27 @@ class DatabaseDriver implements Driver
                 'attributes' => json_encode($attributes),
                 'subscribed' => true,
                 'updated_at' => now(),
+                'created_at' => now(),
             ]
         );
     }
 
+    /**
+     * Unsubscribe a user.
+     */
     public function unsubscribe(string $email): bool
     {
         return DB::table('newsletter_subscribers')
             ->where('email', $email)
-            ->update(['subscribed' => false, 'updated_at' => now()]);
+            ->update([
+                'subscribed' => false,
+                'updated_at' => now(),
+            ]) > 0;
     }
 
+    /**
+     * Check if a user is subscribed.
+     */
     public function isSubscribed(string $email): bool
     {
         return DB::table('newsletter_subscribers')
@@ -34,9 +46,14 @@ class DatabaseDriver implements Driver
             ->exists();
     }
 
+    /**
+     * Get subscriber details.
+     */
     public function getMember(string $email): ?array
     {
-        $row = DB::table('newsletter_subscribers')->where('email', $email)->first();
+        $row = DB::table('newsletter_subscribers')
+            ->where('email', $email)
+            ->first();
 
         if (! $row) {
             return null;
@@ -51,8 +68,21 @@ class DatabaseDriver implements Driver
         ];
     }
 
+    /**
+     * Alias for subscribe (keeps API compatibility).
+     */
     public function subscribeOrUpdate(string $email, array $attributes = []): bool
     {
         return $this->subscribe($email, $attributes);
+    }
+
+    /**
+     * Delete a subscriber.
+     */
+    public function delete(string $email): bool
+    {
+        return DB::table('newsletter_subscribers')
+            ->where('email', $email)
+            ->delete() > 0;
     }
 }

@@ -2,35 +2,55 @@
 
 namespace Nanorocks\DatabaseNewsletter\Drivers;
 
-use Nanorocks\DatabaseNewsletter\Support\Lists;
-
 interface Driver
 {
-    public static function make(array $arguments, Lists $lists);
+    /**
+     * Subscribe a user or update existing attributes.
+     *
+     * @param string $email
+     * @param array $attributes
+     * @return bool
+     */
+    public function subscribe(string $email, array $attributes = []): bool;
 
-    public function getApi();
+    /**
+     * Alias for subscribe (keeps API compatibility).
+     *
+     * @param string $email
+     * @param array $attributes
+     * @return bool
+     */
+    public function subscribeOrUpdate(string $email, array $attributes = []): bool;
 
-    public function subscribe(
-        string $email,
-        array $properties = [],
-        string $listName = '',
-        array $options = []
-    );
+    /**
+     * Unsubscribe a user.
+     *
+     * @param string $email
+     * @return bool
+     */
+    public function unsubscribe(string $email): bool;
 
-    public function subscribeOrUpdate(
-        string $email,
-        array $properties = [],
-        string $listName = '',
-        array $options = []
-    );
+    /**
+     * Delete a subscriber.
+     *
+     * @param string $email
+     * @return bool
+     */
+    public function delete(string $email): bool;
 
-    public function unsubscribe(string $email, string $listName = '');
+    /**
+     * Get subscriber details.
+     *
+     * @param string $email
+     * @return array|null
+     */
+    public function getMember(string $email): ?array;
 
-    public function delete(string $email, string $listName = '');
-
-    public function getMember(string $email, string $listName = '');
-
-    public function hasMember(string $email, string $listName = ''): bool;
-
-    public function isSubscribed(string $email, string $listName = ''): bool;
+    /**
+     * Check if a user is subscribed.
+     *
+     * @param string $email
+     * @return bool
+     */
+    public function isSubscribed(string $email): bool;
 }

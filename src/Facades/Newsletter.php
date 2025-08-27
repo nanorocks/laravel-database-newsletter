@@ -2,24 +2,25 @@
 
 namespace Nanorocks\DatabaseNewsletter\Facades;
 
-use Nanorocks\DatabaseNewsletter\Drivers\DatabaseDriver;
 use Illuminate\Support\Facades\Facade;
+use Nanorocks\DatabaseNewsletter\Drivers\DatabaseDriver;
 
 /**
  * Newsletter Facade
  *
- * @method static array|bool subscribe(string $email, array $properties = [], string $listName = '', array $options = [])
- * @method static array|bool subscribeOrUpdate(string $email, array $properties = [], string $listName = '', array $options = [])
- * @method static array|bool getMember(string $email, string $listName = '')
- * @method static bool hasMember(string $email, string $listName = '')
- * @method static bool isSubscribed(string $email, string $listName = '')
- * @method static array|bool unsubscribe(string $email, string $listName = '')
- * @method static array|bool delete(string $email, string $listName = '')
- * @method static DatabaseDriver getInstance()
+ * @method static bool subscribe(string $email, array $attributes = [])
+ * @method static bool subscribeOrUpdate(string $email, array $attributes = [])
+ * @method static array|null getMember(string $email)
+ * @method static bool isSubscribed(string $email)
+ * @method static bool unsubscribe(string $email)
+ * @method static bool delete(string $email)
  */
 class Newsletter extends Facade
 {
-    public static function getFacadeAccessor()
+    /**
+     * Get the registered name of the component in the container.
+     */
+    protected static function getFacadeAccessor(): string
     {
         return 'newsletter';
     }
