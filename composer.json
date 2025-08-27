@@ -1,13 +1,19 @@
 {
     "name": "nanorocks/laravel-database-newsletter",
     "description": "Laravel Newsletter package with built-in database driver support",
-    "keywords": ["laravel", "newsletter", "database", "nanorocks"],
+    "keywords": [
+        "laravel",
+        "newsletter",
+        "database",
+        "nanorocks"
+    ],
     "type": "library",
     "license": "MIT",
     "authors": [
         {
             "name": "Nanorocks",
-            "email": "contact@nanorocks.dev"
+            "email": "andrejnankov@gmail.com",
+            "website": "https://nankov.mk"
         }
     ],
     "require": {
@@ -35,7 +41,7 @@
         "test": "phpunit"
     },
     "minimum-stability": "stable",
-    "prefer-stable": true,
+    "prefer-stable": true
     "require-dev": {
         "orchestra/testbench": "^10.6"
     }
