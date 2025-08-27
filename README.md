@@ -74,11 +74,8 @@ $member = Newsletter::getMember('john@example.com');
 ## 📖 Roadmap
 
 - ✅ Database driver
-
 - ⏳ Artisan commands for subscriber management
-
 - ⏳ Laravel Notifications integration
-
 - ⏳ Multi-list support
 
 ## 🤝 Contributing
