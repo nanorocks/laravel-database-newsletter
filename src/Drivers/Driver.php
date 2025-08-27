@@ -53,4 +53,11 @@ interface Driver
      * @return bool
      */
     public function isSubscribed(string $email): bool;
+
+    /**
+     * Get all members.
+     *
+     * @return array
+     */
+    public function getAllMembers(): array;
 }

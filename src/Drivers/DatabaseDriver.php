@@ -85,4 +85,22 @@ class DatabaseDriver implements Driver
             ->where('email', $email)
             ->delete() > 0;
     }
+    
+    /**
+     * Get all members.
+     */
+    public function getAllMembers(): array
+    {
+        $rows = DB::table('newsletter_subscribers')->get();
+
+        return $rows->map(function ($row) {
+            return [
+                'email' => $row->email,
+                'attributes' => json_decode($row->attributes, true),
+                'subscribed' => (bool) $row->subscribed,
+                'created_at' => $row->created_at,
+                'updated_at' => $row->updated_at,
+            ];
+        })->toArray();
+    }
 }
