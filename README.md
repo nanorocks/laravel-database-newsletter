@@ -3,6 +3,7 @@
 ![Laravel](https://img.shields.io/badge/Laravel-^10.x%20-red?style=flat-square)
 ![PHP](https://img.shields.io/badge/PHP-^8.1-blue?style=flat-square)
 ![License](https://img.shields.io/badge/license-MIT-green?style=flat-square)
+[![Latest Stable Version](https://poser.pugx.org/nanorocks/laravel-database-newsletter/v/stable)](https://packagist.org/packages/nanorocks/laravel-database-newsletter)
 
 **Laravel Database Newsletter** is a simple and elegant package for managing newsletter subscribers directly in your database.  
 Instead of relying on third-party services, it allows you to store, check, and manage subscribers locally inside your Laravel application.  
