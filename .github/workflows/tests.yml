@@ -1,31 +1,55 @@
-name: Run Tests
+name: Laravel Tests
 
 on:
   push:
-    branches: [main]
+    branches:
+      - main
   pull_request:
-    branches: [main]
+    branches:
+      - main
 
 jobs:
-  tests:
-    runs-on: ubuntu-latest
+  test:
+    runs-on: ubuntu-24.04
     strategy:
       matrix:
         php: [8.3, 8.4, 8.5]
-        laravel: [10.*, 11.*, 12.*]
+        laravel: [10, 11, 12]
+        db: [sqlite, mysql]
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Setup PHP
+      - name: Setup PHP ${{ matrix.php }}
         uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.php }}
-          extensions: mbstring, bcmath, sqlite, pdo_mysql, pdo_pgsql, intl
+          extensions: mbstring, bcmath, sqlite, pdo_mysql, intl
+          ini-file: production
 
-      - name: Install Composer dependencies
+      - name: Setup Composer
         run: composer install --prefer-dist --no-progress --no-interaction
 
+      - name: Configure Laravel version
+        run: composer require "laravel/framework:^${{ matrix.laravel }}" --no-update
+
+      - name: Copy .env
+        run: cp .env.example .env
+
+      - name: Generate application key
+        run: php artisan key:generate
+
+      - name: Setup database
+        run: |
+          if [ "${{ matrix.db }}" = "mysql" ]; then
+            sudo service mysql start
+            mysql -e 'CREATE DATABASE IF NOT EXISTS newsletter_test;'
+            php artisan config:clear
+          fi
+
+      - name: Run migrations
+        run: php artisan migrate --force
+
       - name: Run tests
-        run: vendor/bin/pest --ci
+        run: vendor/bin/phpunit --coverage-text
