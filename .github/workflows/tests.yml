@@ -11,7 +11,9 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        php: [8.3, 8.4] # Test multiple PHP versions
+        php: [8.3, 8.4, 8.5]
+        laravel: [10.*, 11.*, 12.*]
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
@@ -20,11 +22,10 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.php }}
-          extensions: mbstring, bcmath, sqlite
-          coverage: none
+          extensions: mbstring, bcmath, sqlite, pdo_mysql, pdo_pgsql, intl
 
       - name: Install Composer dependencies
         run: composer install --prefer-dist --no-progress --no-interaction
 
       - name: Run tests
-        run: vendor/bin/phpunit --colors=always
+        run: vendor/bin/pest --ci
