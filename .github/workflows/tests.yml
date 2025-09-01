@@ -16,7 +16,13 @@ jobs:
       matrix:
         php: [8.3, 8.4, 8.5]
         laravel: [10.*, 11.*, 12.*]
-        db: [sqlite]
+        include:
+          - laravel: 10.*
+            testbench: 8.*
+          - laravel: 11.*
+            testbench: 9.*
+          - laravel: 12.*
+            testbench: 10.*
 
     steps:
       - name: Checkout repository
@@ -36,10 +42,10 @@ jobs:
           key: ${{ runner.os }}-php-${{ matrix.php }}-laravel-${{ matrix.laravel }}-${{ hashFiles('**/composer.lock') }}
           restore-keys: ${{ runner.os }}-php-${{ matrix.php }}-laravel-${{ matrix.laravel }}-
 
-      - name: Install Laravel version
+      - name: Install Laravel/Testbench
         run: |
           composer require "laravel/framework:${{ matrix.laravel }}" --no-interaction --no-update
-          composer require "orchestra/testbench:^${{ matrix.laravel }}" --dev --no-update
+          composer require "orchestra/testbench:${{ matrix.testbench }}" --dev --no-update
           composer update --prefer-dist --no-interaction --no-progress
 
       - name: Setup .env
