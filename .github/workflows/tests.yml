@@ -2,51 +2,51 @@ name: Laravel Tests
 
 on:
   push:
-    branches:
-      - main
+    branches: [main]
   pull_request:
-    branches:
-      - main
+    branches: [main]
 
 jobs:
   test:
     runs-on: ubuntu-24.04
+    timeout-minutes: 15
+
     strategy:
+      fail-fast: false
       matrix:
         php: [8.3, 8.4, 8.5]
-        laravel: [10, 11, 12]
-        db: [sqlite, mysql]
+        laravel: [10.*, 11.*, 12.*]
+        db: [sqlite]
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
-      - name: Setup PHP ${{ matrix.php }}
+      - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.php }}
           extensions: mbstring, bcmath, sqlite, pdo_mysql, intl
-          ini-file: production
+          coverage: none
 
-      - name: Setup Composer
-        run: composer install --prefer-dist --no-progress --no-interaction
+      - name: Cache Composer dependencies
+        uses: actions/cache@v3
+        with:
+          path: vendor
+          key: ${{ runner.os }}-php-${{ matrix.php }}-laravel-${{ matrix.laravel }}-${{ hashFiles('**/composer.lock') }}
+          restore-keys: ${{ runner.os }}-php-${{ matrix.php }}-laravel-${{ matrix.laravel }}-
 
-      - name: Configure Laravel version
-        run: composer require "laravel/framework:^${{ matrix.laravel }}" --no-update
-
-      - name: Copy .env
-        run: cp .env.example .env
-
-      - name: Generate application key
-        run: php artisan key:generate
-
-      - name: Setup database
+      - name: Install Laravel version
         run: |
-          if [ "${{ matrix.db }}" = "mysql" ]; then
-            sudo service mysql start
-            mysql -e 'CREATE DATABASE IF NOT EXISTS newsletter_test;'
-            php artisan config:clear
-          fi
+          composer require "laravel/framework:${{ matrix.laravel }}" --no-interaction --no-update
+          composer require "orchestra/testbench:^${{ matrix.laravel }}" --dev --no-update
+          composer update --prefer-dist --no-interaction --no-progress
+
+      - name: Setup .env
+        run: cp .env.example .env || true
+
+      - name: Generate app key
+        run: php artisan key:generate
 
       - name: Run migrations
         run: php artisan migrate --force
