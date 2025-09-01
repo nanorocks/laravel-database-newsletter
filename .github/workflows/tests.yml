@@ -1,4 +1,4 @@
-name: Laravel Tests
+name: Laravel Package Tests
 
 on:
   push:
@@ -8,8 +8,8 @@ on:
 
 jobs:
   test:
-    runs-on: ubuntu-24.04
-    timeout-minutes: 15
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
 
     strategy:
       fail-fast: false
@@ -48,14 +48,5 @@ jobs:
           composer require "orchestra/testbench:${{ matrix.testbench }}" --dev --no-update
           composer update --prefer-dist --no-interaction --no-progress
 
-      - name: Setup .env
-        run: cp .env.example .env || true
-
-      - name: Generate app key
-        run: php artisan key:generate
-
-      - name: Run migrations
-        run: php artisan migrate --force
-
       - name: Run tests
-        run: vendor/bin/phpunit --coverage-text
+        run: vendor/bin/phpunit --colors=always
