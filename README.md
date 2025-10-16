@@ -1,5 +1,7 @@
 # Laravel Database Newsletter
 
+![Laravel Database Newsletter](images/laravel-database-newsletter-banner.png)
+
 ![Laravel](https://img.shields.io/badge/Laravel-^10.x%20-red?style=flat-square)
 ![PHP](https://img.shields.io/badge/PHP-^8.3-blue?style=flat-square)
 ![License](https://img.shields.io/badge/license-MIT-green?style=flat-square)
