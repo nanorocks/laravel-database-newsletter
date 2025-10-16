@@ -1,4 +1,4 @@
-name: Run Tests
+name: Laravel Package Tests
 
 on:
   push:
@@ -7,25 +7,46 @@ on:
     branches: [main]
 
 jobs:
-  tests:
+  test:
     runs-on: ubuntu-latest
+    timeout-minutes: 10
+
     strategy:
+      fail-fast: false
       matrix:
-        php: [8.3, 8.4, 8.5]
+        php: [8.3, 8.4]
         laravel: [10.*, 11.*, 12.*]
+        include:
+          - laravel: 10.*
+            testbench: 8.*
+          - laravel: 11.*
+            testbench: 9.*
+          - laravel: 12.*
+            testbench: 10.*
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.php }}
-          extensions: mbstring, bcmath, sqlite, pdo_mysql, pdo_pgsql, intl
+          extensions: mbstring, bcmath, sqlite, pdo_mysql, intl
+          coverage: none
 
-      - name: Install Composer dependencies
-        run: composer install --prefer-dist --no-progress --no-interaction
+      - name: Cache Composer dependencies
+        uses: actions/cache@v3
+        with:
+          path: vendor
+          key: ${{ runner.os }}-php-${{ matrix.php }}-laravel-${{ matrix.laravel }}-${{ hashFiles('**/composer.lock') }}
+          restore-keys: ${{ runner.os }}-php-${{ matrix.php }}-laravel-${{ matrix.laravel }}-
+
+      - name: Install Laravel/Testbench
+        run: |
+          composer require "laravel/framework:${{ matrix.laravel }}" --no-interaction --no-update
+          composer require "orchestra/testbench:${{ matrix.testbench }}" --dev --no-update
+          composer update --prefer-dist --no-interaction --no-progress
 
       - name: Run tests
-        run: vendor/bin/pest --ci
+        run: vendor/bin/phpunit --colors=always
